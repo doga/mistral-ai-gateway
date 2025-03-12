@@ -1,0 +1,11 @@
+{
+  "description": "Gateway for Mistral's AI API, written in TypeScript to run on the [Bun](https://bun.sh) runtime. Currently using [one of the free Mistral models](https://docs.mistral.ai/getting-started/models/models_overview/#free-models).",
+  "license": "Apache-2.0",
+  "main": "main.ts",
+  "scripts": {
+    "dev": "MISTRAL_API_KEY=$QWORUM_MISTRAL_AI_API_KEY bun --watch run main.ts"
+  },
+  "dependencies": {
+    "@mistralai/mistralai": "^1.5.1"
+  }
+}
