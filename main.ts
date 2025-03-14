@@ -61,3 +61,33 @@ const server = Bun.serve({
 });
 
 console.log(`Listening on http://localhost:${server.port} ...`);
+
+
+/*
+aiOutput example:
+
+{
+    "id": "03b740b104dc44d08259643207dec853",
+    "object": "chat.completion",
+    "model": "open-mistral-nemo-2407",
+    "usage": {
+        "promptTokens": 12,
+        "completionTokens": 100,
+        "totalTokens": 112
+    },
+    "created": 1741796863,
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "content": "One of the most well-known Viennese desserts is \"Sachertorte\". It's a dense chocolate cake with a thin layer of apricot jam, covered in dark chocolate icing. The original recipe was created by Franz Sacher in 1832, and it's now a symbol of Austrian cuisine. Another famous Viennese dessert is \"Apfelstrudel\" (apple strudel), a layered pastry filled with apples, sugar, and cinnamon.",
+                "toolCalls": null,
+                "prefix": false,
+                "role": "assistant"
+            },
+            "finishReason": "stop"
+        }
+    ]
+}
+
+*/

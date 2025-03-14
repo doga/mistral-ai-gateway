@@ -28,4 +28,8 @@ Right now the gateway only supports HTTP (not HTTPS), and the TCP port number is
 
 See [mistral-ai-gateway-client](https://github.com/doga/mistral-ai-gateway-client).
 
+## Dependencies
+
+This library depends on the [official Mistral Typescript Client](https://github.com/mistralai/client-ts).
+
 ∎
