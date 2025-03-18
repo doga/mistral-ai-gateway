@@ -19,8 +19,10 @@ Prerequisites:
 Once you've got that done, run the gateway thusly:
 
 ```shell
-MISTRAL_API_KEY='<AnApiKey>' bun run dev
+MISTRAL_API_KEY='<AnApiKey>' CORS_ALLOWED_ORIGINS='<space-separated list of origin URLs>' bun run dev
 ```
+
+`CORS_ALLOWED_ORIGINS` is optional, by default all origins are allowed.
 
 Right now the gateway only supports HTTP (not HTTPS), and the TCP port number is fixed to `4321`.
 

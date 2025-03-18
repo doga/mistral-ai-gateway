@@ -2,6 +2,9 @@
 
 // import { gatewayApiKeyChecker } from './lib/middleware/gateway-api-key.mts';
 import { Mistral } from "@mistralai/mistralai";
+import type { MiddlewareResult } from "./lib/middleware/middleware.mts";
+import { MiddlewareHeaders } from "./lib/middleware/middleware.mts";
+import cors from "./lib/middleware/cors.mts";
 
 console.log("Starting Mistral AI Gateway...");
 
@@ -12,14 +15,30 @@ mistralApiKey = process.env['MISTRAL_API_KEY'] ?? ''; // '' must never happen
 // console.log("api key", mistralApiKey);
 
 const
-mistral       = new Mistral({apiKey: mistralApiKey}),
-model         = 'open-mistral-nemo-2407'; // https://docs.mistral.ai/getting-started/models/models_overview/#free-models
+mistral = new Mistral({apiKey: mistralApiKey}),
+
+// models https://docs.mistral.ai/getting-started/models/models_overview/#free-models
+model   = 'mistral-small-latest';
+// model   = 'open-mistral-nemo-2407'; // nemo is bad at reasoning
 
 // console.log("Starting Mistral AI Gateway...", mistral);
 
-const server = Bun.serve({
+const server = Bun.serve({ // BUG implement CORS
   port,
   fetch: async function(request: Request) {
+    console.debug("request", request);
+
+    const 
+    headers = new MiddlewareHeaders({'Content-Type': 'application/json'}),
+    // middleware
+    corsResult: MiddlewareResult = cors(request); 
+
+    if (corsResult instanceof Response) {
+      return corsResult;
+    } else if (corsResult instanceof Headers) {
+      headers.add(corsResult);
+    }
+
     try {
       const userInput = await request.json();
 
@@ -37,25 +56,29 @@ const server = Bun.serve({
             role: "user",
           },
         ],
-      });
-
-      return new Response(
+      }),
+      response = new Response(
         JSON.stringify(aiOutput), 
         {
           status: 200, 
           statusText: 'OK',
-          headers: {'Content-Type': 'application/json'}
+          headers
         }
       );
+
+      console.debug("ok response", response);
+      return response;
     } catch (error) {
-      return new Response(
+      const response = new Response(
         JSON.stringify({message: `${error}`}),
         {
           status: 503, 
           statusText: 'Service Unavailable',
-          headers: {'Content-Type': 'application/json'}
+          headers
         }
       );
+      console.debug("error response", response);
+      return response;
     }
   },
 });
